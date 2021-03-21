@@ -5,4 +5,10 @@
         <RootNamespace>StrawberryTesting</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="HotChocolate" Version="11.1.0-preview.85" />
+      <PackageReference Include="HotChocolate.AspNetCore" Version="11.1.0-preview.85" />
+      <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="11.1.0-preview.85" />
+    </ItemGroup>
+
 </Project>
