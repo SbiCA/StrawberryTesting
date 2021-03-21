@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -24,6 +22,10 @@ namespace StrawberryTesting
                 .AddMutationType(d => d.Name("Mutation"))
                 .AddTypeExtension<BloggerMutations>();
 
+            services.AddAuthorization(configure =>
+            {
+                configure.AddPolicy("Blogger", builder => builder.RequireClaim("Role", "Blogger"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,8 +37,9 @@ namespace StrawberryTesting
             }
 
             app.UseRouting();
-            
-            // TODO add authN + authZ
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -46,9 +49,13 @@ namespace StrawberryTesting
     }
 
     public record BlogPost(string Title, string Description, string Content, DateTime Published, IEnumerable<string> Tags, Author Owner);
+
     public record Author (string UserId, string Name);
-    
+
+    public record UserContext(string UserId, string Role);
+
     [ExtendObjectType("Mutation")]
+    [Authorize(Policy = "Blogger")]
     public class BloggerMutations
     {
         public BlogPost CreateBlogPost(BlogInput input)
@@ -56,7 +63,7 @@ namespace StrawberryTesting
             // TODO check role "blogger"
             throw new NotImplementedException();
         }
-        
+
         public BlogPost UpdateBlogPost(BlogInput input)
         {
             // TODO check owner ship
@@ -68,7 +75,6 @@ namespace StrawberryTesting
             // TODO check owner ship
             throw new NotImplementedException();
         }
-        
     }
 
     public record BlogInput(string Title, string Description, string Content, IEnumerable<string> Tags);
@@ -81,7 +87,6 @@ namespace StrawberryTesting
             var simon = new Author("1", "simone@the-blogger.com");
             return new List<BlogPost>
             {
-              
                 new("My first blog", "Its so nice", "here is some html", new DateTime(2020, 8, 1), new List<string>
                 {
                     "Geek"

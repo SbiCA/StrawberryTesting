@@ -1,0 +1,25 @@
+﻿{
+  "Data": {
+    "Posts": [
+      {
+        "Title": "My first blog",
+        "Published": "2020-08-01T00:00:00+02:00"
+      }
+    ]
+  },
+  "DataInfo": {
+    "Posts": [
+      {
+        "__typename": "BlogPost",
+        "Title": "My first blog",
+        "Published": "2020-08-01T00:00:00+02:00"
+      }
+    ],
+    "EntityIds": [],
+    "Version": 1
+  },
+  "DataFactory": {},
+  "Errors": [],
+  "Extensions": {},
+  "ContextData": {}
+}

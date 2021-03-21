@@ -1,0 +1,6 @@
+query readBlogs{
+    posts {
+        title
+        published
+    }
+}
